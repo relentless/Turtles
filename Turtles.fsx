@@ -43,47 +43,46 @@ let execute startTurtle code =
         let radians = angle * System.Math.PI / 180.0
         (x + distance * cos radians, y + distance * sin radians)
     
-    let rec exec codeToExec currentTurtle points =
+    let rec exec codeToExec turtle lines =
         match codeToExec with
-        | [] -> points
+        | [] -> lines
         | currentInstruction::rest ->
             match currentInstruction with
             | Turn(angle) -> 
-                exec rest { currentTurtle with Direction = (currentTurtle.Direction + angle) } points
+                exec rest { turtle with Direction = (turtle.Direction + angle) } lines
             | Forward(distance) -> 
-                let newX, newY = newPosition currentTurtle.X currentTurtle.Y currentTurtle.Direction distance
-                exec rest { currentTurtle with X = newX; Y = newY } ((newX, newY)::points)
+                let newX, newY = newPosition turtle.X turtle.Y turtle.Direction distance
+                let line = ((turtle.X,turtle.Y),((newX, newY)))
+                exec rest { turtle with X = newX; Y = newY } (line::lines)
             | Repeat(count, commands) -> 
                 let flattenedCommands = commands |> List.replicate count |> List.concat
-                exec (flattenedCommands@rest) currentTurtle points
+                exec (flattenedCommands@rest) turtle lines
 
-    exec code startTurtle [(startTurtle.X, startTurtle.Y)]
+    exec code startTurtle []
 
 // DISPLAY
 
 let width,height = 800,600
 
-let display points =
+let display lines =
     let form = new Form (Text="Turtles", Width=width, Height=height)
     let image = new Bitmap(width, height)
     let picture = new PictureBox(Dock=DockStyle.Fill, Image=image)
     do  form.Controls.Add(picture)
     let pen = new Pen(Color.Red)
-    let drawLine (x1,y1) (x2,y2) =
+
+    let drawLine ((x1,y1),(x2,y2)) =
         use graphics = Graphics.FromImage(image)
         graphics.DrawLine(pen,int x1,int y1,int x2, int y2)
-    let rec draw = function
-        | point1::point2::rest -> 
-            drawLine point1 point2
-            draw (point2::rest)
-        | _ -> []
 
-    draw points |> ignore
+    lines |> List.iter drawLine
 
     form.ShowDialog() |> ignore
 
 //"repeat 4 [forward 50 repeat 3 [right 30 forward 30]]"
-"repeat 3 [forward 80 repeat 20 [right 30 forward 30]]"
+//"repeat 3 [forward 80 repeat 20 [right 30 forward 30]]"
+
+"repeat 4 [forward 50 right 90 repeat 4 [forward 5 right 180 forward 5 right 90]]"
 |> parse
 |> execute { X=(float width)/2.0; Y=(float height)/2.0; Direction=0.0 }
 |> display
