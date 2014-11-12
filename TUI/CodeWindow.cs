@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using Microsoft.FSharp.Collections;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.FSharp.Core;
-using Microsoft.FSharp.Collections;
 using Turtle;
-
 
 namespace TUI {
     public partial class CodeWindow : Form {
@@ -24,7 +16,7 @@ namespace TUI {
             var sourceCode = Source.Text;
             try {
                 var commands = Parser.parse(sourceCode);
-                var startTurtle = new Interpreter.Turtle(turtleTrailBox.Width / 2.0, turtleTrailBox.Height / 2.0, 0.0);
+                var startTurtle = new Interpreter.Turtle(turtleTrailBox.Width / 2.0, turtleTrailBox.Height / 2.0, 270.0);
                 _lines = Interpreter.execute(startTurtle, commands);
                 turtleTrailBox.Refresh();
             }
@@ -46,6 +38,34 @@ namespace TUI {
                     (float)line.Item2.Item1,
                     (float)line.Item2.Item2);
             }
+        }
+
+        private void ClearButton_Click(object sender, EventArgs e) {
+            Source.Text = "";
+            _lines = null;
+            turtleTrailBox.Refresh();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+            if (keyData == (Keys.Control | Keys.D1)) {
+                Source.Text = @"repeat 4
+  [right 90 forward 80]";
+                return true;
+            }
+            if (keyData == (Keys.Control | Keys.D2)) {
+                Source.Text = @"repeat 10
+  [right 36
+  repeat 5 [forward 54 right 72]]";
+                return true;
+            }
+            if (keyData == (Keys.Control | Keys.D3)) {
+                Source.Text = @"repeat 36
+  [right 10 
+  repeat 2 [forward 100 right 90]
+  repeat 2 [forward 100 right 91]]";
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }
