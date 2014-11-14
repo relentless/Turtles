@@ -22,14 +22,15 @@ let pright = pstring "right" >>. spaces1 >>. pfloat |>> (fun x -> Turn(x))
 let prepeat,prepeatImpl = createParserForwardedToRef()
 
 let pcommand = pforward <|> pleft <|> pright <|> prepeat
-let pblock = pstring "[" >>. many1 (pcommand .>> spaces) .>> pstring "]"
+let pcommandlist = many1 (pcommand .>> spaces)
+let pblock = pstring "[" >>. pcommandlist .>> pstring "]"
 
 do prepeatImpl := pstring "repeat" >>. spaces1 >>. pfloat .>> spaces .>>. pblock
                     |>> (fun (x,commands) -> Repeat(int x, commands))
 
 let parse code =
-    match run pcommand code with
-    | Success(result, _, _) -> [result]
+    match run pcommandlist code with
+    | Success(result, _, _) -> result
     | Failure(errorMsg, _, _) -> failwith ("Parse error: " + errorMsg)
 
 parse "repeat 3 [left 30 repeat 5 [forward 50 right 30]]"
