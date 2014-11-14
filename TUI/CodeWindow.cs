@@ -16,8 +16,9 @@ namespace TUI {
             var sourceCode = Source.Text;
             try {
                 var commands = Parser.parse(sourceCode);
-                var startTurtle = new Interpreter.Turtle(turtleTrailBox.Width / 2.0, turtleTrailBox.Height / 2.0, 270.0);
+                var startTurtle = new Interpreter.Turtle(turtleTrailBox.Width / 2.0, turtleTrailBox.Height / 2.0, 0.0);
                 _lines = Interpreter.execute(startTurtle, commands);
+
                 turtleTrailBox.Refresh();
             }
             catch (Exception ex) {
@@ -30,14 +31,20 @@ namespace TUI {
             if (_lines == null)
                 return;
 
+            var image = new Bitmap(turtleTrailBox.Width, turtleTrailBox.Height);
+
             foreach( var line in _lines ){
-                e.Graphics.DrawLine(
+                Graphics.FromImage(image).DrawLine(
                     new Pen(Color.Red,2f), 
                     (float)line.Item1.Item1,
                     (float)line.Item1.Item2,
                     (float)line.Item2.Item1,
                     (float)line.Item2.Item2);
             }
+
+            // flip image because windows y-coordinates are 'backwards'
+            image.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            e.Graphics.DrawImageUnscaled(image,0,0);
         }
 
         private void ClearButton_Click(object sender, EventArgs e) {

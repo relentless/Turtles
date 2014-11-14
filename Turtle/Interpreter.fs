@@ -8,7 +8,7 @@ let execute startTurtle code =
 
     let newPosition x y angle distance =
         let radians = angle * System.Math.PI / 180.0
-        (x + distance * cos radians, y + distance * sin radians)
+        (x + distance * sin radians, y + distance * cos radians)
     
     let rec exec codeToExec turtle lines =
         match codeToExec with
@@ -25,4 +25,4 @@ let execute startTurtle code =
                 let flattenedCommands = commands |> List.replicate count |> List.concat
                 exec (flattenedCommands@rest) turtle lines
 
-    exec code startTurtle []
+    exec code startTurtle [] |> List.rev
