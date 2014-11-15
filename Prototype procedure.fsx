@@ -18,16 +18,22 @@ type Command =
     | Turn of float
     | Repeat of int * Command list
     | Procedure of string * Command list
+    | Call of string
 
 // PARSER
 let pforward = pstring "forward" >>. spaces1 >>. pfloat |>> (fun x -> Forward(x))
 let pleft = pstring "left" >>. spaces1 >>. pfloat |>> (fun x -> Turn(-x))
 let pright = pstring "right" >>. spaces1 >>. pfloat |>> (fun x -> Turn(x))
 
+//let pcolour = pstring "set-colour" >>. spaces >>. pstring "(" >>. spaces >>. charsTillString ")" true 10 |>> (fun colour -> SetColour(colour.Trim()))
+
+let pcall = pstring "do" >>. spaces >>. pstring "(" >>. spaces >>. manySatisfy isLetter .>> spaces .>> pstring ")" |>> (fun name -> Call(name))
+
 let prepeat,prepeatImpl = createParserForwardedToRef()
 let pproc,pprocImpl = createParserForwardedToRef()
+//let pcall,pcallImpl = createParserForwardedToRef()
 
-let pcommand = pforward <|> pleft <|> pright <|> prepeat <|> pproc
+let pcommand = pforward <|> pleft <|> pright <|> prepeat <|> pproc <|> pcall
 let pcommandlist = many1 (pcommand .>> spaces)
 let pblock = pstring "[" >>. pcommandlist .>> pstring "]"
 
@@ -73,6 +79,8 @@ let execute startTurtle code =
                 exec (flattenedCommands@rest) turtle lines procs
             | Procedure(name, commands) -> 
                 exec rest turtle lines (procs |> Map.add name commands)
+            | Call(name) -> 
+                exec rest turtle lines procs
 
     exec code startTurtle [] Map.empty
 
@@ -101,7 +109,9 @@ let display lines =
 //"repeat 4 [forward 50 right 90 repeat 4 [forward 5 right 180 forward 5 right 90]]"
 @"to square
   repeat 4 [forward 50 right 90]
-end"
+end
+
+do(square)"
 |> parse
 |> execute { X=(float width)/2.0; Y=(float height)/2.0; Direction=0.0 }
 |> display
