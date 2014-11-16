@@ -80,7 +80,9 @@ let execute startTurtle code =
             | Procedure(name, commands) -> 
                 exec rest turtle lines (procs |> Map.add name commands)
             | Call(name) -> 
-                exec rest turtle lines procs
+                if not (procs |> Map.containsKey name) then failwith (sprintf "procedure '%s' not found" name)
+                let procCommands = (procs.[name])
+                exec (procCommands@rest) turtle lines procs
 
     exec code startTurtle [] Map.empty
 
@@ -111,6 +113,11 @@ let display lines =
   repeat 4 [forward 50 right 90]
 end
 
+to line forward 100 end
+
+do(line)
+do( square )
+do (line)
 do(square)"
 |> parse
 |> execute { X=(float width)/2.0; Y=(float height)/2.0; Direction=0.0 }
