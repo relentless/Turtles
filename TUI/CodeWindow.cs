@@ -1,12 +1,13 @@
 ﻿using Microsoft.FSharp.Collections;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Turtle;
 
 namespace TUI {
     public partial class CodeWindow : Form {
-        private FSharpList<Tuple<Tuple<double, double>, Tuple<double, double>>> _lines;
+        private FSharpList<Turtle.Interpreter.Line> _lines;
 
         public CodeWindow() {
             InitializeComponent();
@@ -26,6 +27,13 @@ namespace TUI {
             }
         }
 
+        private Dictionary<string, Color> _colours = new Dictionary<string, Color> {
+            {"red",Color.Red},
+            {"blue", Color.Blue},
+            {"green", Color.Green},
+            {Turtle.Interpreter.defaultColour, Color.Black}
+        };
+
         private void turtleTrailBox_Paint(object sender, PaintEventArgs e) {
 
             if (_lines == null)
@@ -34,12 +42,15 @@ namespace TUI {
             var image = new Bitmap(turtleTrailBox.Width, turtleTrailBox.Height);
 
             foreach( var line in _lines ){
+
+                var penColour = _colours[line.Colour];
+
                 Graphics.FromImage(image).DrawLine(
-                    new Pen(Color.Red,2f), 
-                    (float)line.Item1.Item1,
-                    (float)line.Item1.Item2,
-                    (float)line.Item2.Item1,
-                    (float)line.Item2.Item2);
+                    new Pen(penColour, 2f), 
+                    (float)line.StartPoint.X,
+                    (float)line.StartPoint.Y,
+                    (float)line.EndPoint.X,
+                    (float)line.EndPoint.Y);
             }
 
             // flip image because windows y-coordinates are 'backwards'
@@ -70,6 +81,16 @@ namespace TUI {
   [right 10 
   repeat 2 [forward 100 right 90]
   repeat 2 [forward 100 right 91]]";
+                return true;
+            }
+            if (keyData == (Keys.Control | Keys.D4)) {
+                Source.Text = @"set-colour(red)
+repeat 36
+  [rt 10 fd 20 rt 170 fd 20 lt 170]
+rt 10 fd 22 rt 90
+set-colour(blue)
+repeat 36
+  [forward 10 right 14]";
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);

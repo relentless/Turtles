@@ -15,9 +15,9 @@ let ``text converted to lines`` () =
     |> parse
     |> execute {X=0.0; Y=0.0; Direction=0.0}
     |> should equal [
-        (0.0,0.0),(0.0,10.0)
-        (0.0,10.0),(0.0,5.0)
-        (0.0,5.0),(0.0,15.0)
-        (0.0,15.0),(0.0,10.0)]
+        {StartPoint={X=0.0;Y=0.0}; EndPoint={X=0.0;Y=10.0}; Colour="default"}
+        {StartPoint={X=0.0;Y=10.0}; EndPoint={X=0.0;Y=5.0}; Colour="default"}
+        {StartPoint={X=0.0;Y=5.0}; EndPoint={X=0.0;Y=15.0}; Colour="default"}
+        {StartPoint={X=0.0;Y=15.0}; EndPoint={X=0.0;Y=10.0}; Colour="default"}]
 
 

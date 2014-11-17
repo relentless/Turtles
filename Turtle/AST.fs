@@ -4,3 +4,4 @@ type Command =
     | Forward of float
     | Turn of float
     | Repeat of int * Command list
+    | SetColour of string
