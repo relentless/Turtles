@@ -35,9 +35,14 @@ let prepeat,prepeatImpl = createParserForwardedToRef()
 let pproc,pprocImpl = createParserForwardedToRef()
 let pcall,pcallImpl = createParserForwardedToRef()
 
-let updateProcs() = 
-    do pcallImpl := choice [!procs]  |>> (fun name -> Call(name))
+let createProcedureCallParser = function
+    | Procedure(name,_) -> pstring name .>> spaces |>> (fun procName -> Call(procName))
+    | _ -> failwith "That's not a procedure"
 
+let updateCallsParser() = 
+    do pcallImpl := choice (!procs |> List.map createProcedureCallParser)
+
+updateCallsParser()
 
 let pcommand = pforward <|> pleft <|> pright <|> prepeat <|> pproc <|> pcall
 let pcommandlist = many1 (pcommand .>> spaces)
@@ -46,6 +51,9 @@ let pblock = pstring "[" >>. pcommandlist .>> pstring "]"
 do prepeatImpl := pstring "repeat" >>. spaces1 >>. pfloat .>> spaces .>>. pblock
                     |>> (fun (x,commands) -> Repeat(int x, commands))
 
+let addToProceduresList proc =
+    procs := proc::!procs
+
 do pprocImpl := 
     pstring "to" >>. spaces1 
     >>. manySatisfy isLetter
@@ -53,8 +61,8 @@ do pprocImpl :=
     .>> spaces .>> pstring "end"
     |>> (fun (name,commands) -> 
         let newProc = Procedure(name,commands)
-        procs := newProc::!procs
-        updateProcs()
+        newProc |> addToProceduresList
+        updateCallsParser()
         newProc)
 
 let parse code =
@@ -125,10 +133,7 @@ end
 
 to line forward 100 end
 
-do(line)
-do( square )
-do (line)
-do(square)"
+repeat 2 [line square]"
 |> parse
 |> execute { X=(float width)/2.0; Y=(float height)/2.0; Direction=0.0 }
 |> display
