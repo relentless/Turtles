@@ -93,6 +93,15 @@ repeat 36
   [forward 10 right 14]";
                 return true;
             }
+            if (keyData == (Keys.Control | Keys.D5)) {
+                Source.Text = @"to square
+  repeat 4 [forward 100 right 90]
+end
+
+square";
+                return true;
+            }
+        
             return base.ProcessCmdKey(ref msg, keyData);
         }
     }

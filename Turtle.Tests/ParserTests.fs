@@ -31,3 +31,8 @@ let ``shortened commands parsed correctly`` () =
     parse "lt 1" |> should equal [Turn(-1.0)]
     parse "rt 100" |> should equal [Turn(100.0)]
     parse "rpt 3 [fd 10]" |> should equal [Repeat(3,[Forward(10.0)])]
+
+[<Fact>]
+let ``procedure definition and call parsed correctly`` () =
+    parse "to go forward 1 end go" |> should equal [Procedure("go",[Forward(1.0)]);Call("go")]
+    
