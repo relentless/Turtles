@@ -66,25 +66,37 @@ namespace TUI {
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             if (keyData == (Keys.Control | Keys.D1)) {
-                Source.Text = @"repeat 4
-  [right 90 forward 80]";
+                Source.Text = @"# Basic Commands
+
+right 90
+forward 80
+right 90
+forward 80
+right 90
+forward 80
+right 90
+forward 80";
                 return true;
             }
             if (keyData == (Keys.Control | Keys.D2)) {
-                Source.Text = @"repeat 10
+                Source.Text = @"# Repeating Blocks
+
+repeat 4
+  [right 90 forward 80]";
+                return true;
+            }
+            if (keyData == (Keys.Control | Keys.D3)) {
+                Source.Text = @"# More Complex
+
+repeat 10
   [right 36
   repeat 5 [forward 54 right 72]]";
                 return true;
             }
-            if (keyData == (Keys.Control | Keys.D3)) {
-                Source.Text = @"repeat 36
-  [right 10 
-  repeat 2 [forward 100 right 90]
-  repeat 2 [forward 100 right 91]]";
-                return true;
-            }
             if (keyData == (Keys.Control | Keys.D4)) {
-                Source.Text = @"set-colour(red)
+                Source.Text = @"# With Colour
+
+set-colour(red)
 repeat 36
   [rt 10 fd 20 rt 170 fd 20 lt 170]
 rt 10 fd 22 rt 90
@@ -94,7 +106,9 @@ repeat 36
                 return true;
             }
             if (keyData == (Keys.Control | Keys.D5)) {
-                Source.Text = @"to square
+                Source.Text = @"# Procedures
+
+to square
   repeat 4 [forward 100 right 90]
 end
 
@@ -103,6 +117,13 @@ square";
             }
         
             return base.ProcessCmdKey(ref msg, keyData);
+
+//            @"# Even More Complex
+//
+//repeat 36
+//  [right 10 
+//  repeat 2 [forward 100 right 90]
+//  repeat 2 [forward 100 right 91]]"
         }
     }
 }

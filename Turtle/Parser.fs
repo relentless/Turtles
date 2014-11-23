@@ -12,8 +12,11 @@ let prepeat,prepeatImpl = createParserForwardedToRef()
 let pproc,pprocImpl = createParserForwardedToRef()
 let pcall,pcallImpl = createParserForwardedToRef()
 
-let pcommand = pforward <|> pleft <|> pright <|> prepeat <|> pcolour <|> pproc <|> pcall
-let pcommandlist = many1 (pcommand .>> spaces)
+let pcomment = pchar '#' >>. restOfLine true
+let pcommand = spaces >>. (pforward <|> pleft <|> pright <|> prepeat <|> pcolour <|> pproc <|> pcall)
+let pcommandcomment = optional pcomment >>. pcommand .>> optional pcomment
+let pcommandlist = many1 (pcommandcomment .>> spaces)
+
 let pblock = pstring "[" >>. pcommandlist .>> pstring "]"
 
 do prepeatImpl := (pstring "repeat" <|> pstring "rpt") >>. spaces1 >>. pfloat .>> spaces .>>. pblock

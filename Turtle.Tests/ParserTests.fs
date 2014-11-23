@@ -35,4 +35,19 @@ let ``shortened commands parsed correctly`` () =
 [<Fact>]
 let ``procedure definition and call parsed correctly`` () =
     parse "to go forward 1 end go" |> should equal [Procedure("go",[Forward(1.0)]);Call("go")]
-    
+
+[<Fact>]
+let ``text between # and the end of the line is ignored`` () =
+    parse @"#hi mum
+forward 1 # comment 2
+right 90" |> should equal [Forward(1.0);Turn(90.0)]
+
+[<Fact>]
+let ``empty lines are ignored`` () =
+    parse @"
+forward 1" |> should equal [Forward(1.0)]
+
+[<Fact>]
+let ``spaces before commands are ignored`` () =
+    parse @"  forward 1
+    repeat 3 [  right 5]" |> should equal [Forward(1.0);Repeat(3,[Turn(5.0)])]
