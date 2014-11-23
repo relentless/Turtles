@@ -33,10 +33,10 @@
             // turtleTrailBox
             // 
             this.turtleTrailBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.turtleTrailBox.Location = new System.Drawing.Point(10, 12);
+            this.turtleTrailBox.Location = new System.Drawing.Point(707, 13);
             this.turtleTrailBox.Margin = new System.Windows.Forms.Padding(4);
             this.turtleTrailBox.Name = "turtleTrailBox";
-            this.turtleTrailBox.Size = new System.Drawing.Size(1310, 927);
+            this.turtleTrailBox.Size = new System.Drawing.Size(1000, 1000);
             this.turtleTrailBox.TabIndex = 2;
             this.turtleTrailBox.TabStop = false;
             this.turtleTrailBox.Paint += new System.Windows.Forms.PaintEventHandler(this.turtleTrailBox_Paint);
@@ -44,22 +44,22 @@
             // Source
             // 
             this.Source.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Source.Location = new System.Drawing.Point(10, 944);
+            this.Source.Location = new System.Drawing.Point(13, 13);
             this.Source.Margin = new System.Windows.Forms.Padding(4);
             this.Source.Multiline = true;
             this.Source.Name = "Source";
             this.Source.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.Source.Size = new System.Drawing.Size(1188, 317);
+            this.Source.Size = new System.Drawing.Size(686, 919);
             this.Source.TabIndex = 0;
             this.Source.Text = "Ctrl-{1..5} to load examples";
             // 
             // Go
             // 
             this.Go.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Go.Location = new System.Drawing.Point(1206, 1108);
+            this.Go.Location = new System.Drawing.Point(13, 940);
             this.Go.Margin = new System.Windows.Forms.Padding(4);
             this.Go.Name = "Go";
-            this.Go.Size = new System.Drawing.Size(118, 150);
+            this.Go.Size = new System.Drawing.Size(335, 73);
             this.Go.TabIndex = 1;
             this.Go.Text = "&Go";
             this.Go.UseVisualStyleBackColor = true;
@@ -68,10 +68,10 @@
             // ClearButton
             // 
             this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearButton.Location = new System.Drawing.Point(1204, 944);
+            this.ClearButton.Location = new System.Drawing.Point(356, 940);
             this.ClearButton.Margin = new System.Windows.Forms.Padding(4);
             this.ClearButton.Name = "ClearButton";
-            this.ClearButton.Size = new System.Drawing.Size(118, 156);
+            this.ClearButton.Size = new System.Drawing.Size(343, 73);
             this.ClearButton.TabIndex = 4;
             this.ClearButton.Text = "&Clear";
             this.ClearButton.UseVisualStyleBackColor = true;
@@ -82,7 +82,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1332, 1271);
+            this.ClientSize = new System.Drawing.Size(1723, 1029);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.turtleTrailBox);
             this.Controls.Add(this.Go);
