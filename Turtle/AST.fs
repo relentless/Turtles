@@ -7,3 +7,4 @@ type Command =
     | SetColour of string
     | Procedure of string * Command list
     | Call of string
+    | Variable of string * float

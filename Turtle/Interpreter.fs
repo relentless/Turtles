@@ -24,7 +24,6 @@ let execute startTurtle code =
             | Forward(distance) -> 
                 let newX, newY = newPosition turtle.X turtle.Y turtle.Direction distance
                 let line = { StartPoint = {X=turtle.X;Y=turtle.Y}; EndPoint = {X=newX;Y=newY}; Colour=colour }
-                //let line = ((turtle.X,turtle.Y),((newX, newY)),colour)
                 exec rest { turtle with X = newX; Y = newY } (line::lines) colour procs
             | Repeat(count, commands) -> 
                 let flattenedCommands = commands |> List.replicate count |> List.concat
@@ -37,5 +36,7 @@ let execute startTurtle code =
                 if not (procs |> Map.containsKey name) then failwith (sprintf "procedure '%s' not found" name)
                 let procCommands = (procs.[name])
                 exec (procCommands@rest) turtle lines colour procs
+            | Variable(_) -> 
+                exec rest turtle lines colour procs
 
     exec code startTurtle [] defaultColour Map.empty |> List.rev

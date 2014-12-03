@@ -51,3 +51,17 @@ forward 1" |> should equal [Forward(1.0)]
 let ``spaces before commands are ignored`` () =
     parse @"  forward 1
     repeat 3 [  right 5]" |> should equal [Forward(1.0);Repeat(3,[Turn(5.0)])]
+
+
+// let x be 10
+// forward x
+
+[<Fact>]
+let ``variable declaration`` () =
+    parse "let x be 10" |> should equal [Variable("x",10.0)]
+
+
+[<Fact>]
+let ``variables can be used`` () =
+    parse @"let x be 10 
+    forward x" |> should equal [Variable("x",10.0);Forward(10.0)]
